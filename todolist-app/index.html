@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDo List</title>
+</head>
+
+<body>
+    <main>
+        <section>
+            <h3>Categories</h3>
+            <ul id="categoryList"></ul>
+            <button id="addCategoryButton">+ Add Category</button>
+        </section>
+
+        <dialog id="categoryDialog">
+            <form id="categoryDialog">
+                <h3>Add Category</h3>
+
+                <label for="dialogCategoryName">Category Name</label>
+                <input id="dialogCategoryName" name="dialogCategoryName" type="text" required>
+
+                <div class="actions">
+                    <button type="button" id="cancelDialog">Cancel</button>
+                    <button type="submit" id="submitDialog">Submit</button>
+                </div>
+            </form>
+        </dialog>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
