@@ -232,6 +232,16 @@ function addDetailedTask(taskName) {
 
 }
 
+function deleteTask(taskId){
+    const tasks = JSON.parse(localStorage.getItem("Tasks") || "[]");
+
+    const updatedTasks = tasks.filter(task => task.id !== taskId);
+
+    localStorage.setItem("Tasks", JSON.stringify(updatedTasks));
+    listTask();
+
+}
+
 function listTask() {
     const tasks = JSON.parse(localStorage.getItem("Tasks") || "[]");
     const taskList = document.getElementById("taskList");
@@ -253,6 +263,10 @@ function listTask() {
 
             const deleteButton = document.createElement("button");
             deleteButton.textContent = "Delete";
+
+             deleteButton.addEventListener('click', () => {
+                deleteTask(tasks[i].id);
+            });
 
             li.appendChild(checkbox);
             li.appendChild(span);
