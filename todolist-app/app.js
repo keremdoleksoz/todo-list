@@ -68,6 +68,19 @@ function editCategory(categoryId, newCategoryName) {
 
 function deleteCategory(categoryId) { // UNFINISHED
     const categories = JSON.parse(localStorage.getItem(("Categories") || "[]"));
+    const tasks = JSON.parse(localStorage.getItem("Tasks") || "[]");
+
+    for(let i=0; i<tasks.length; i++){
+        if(tasks[i].category == categoryId){
+            tasks[i].category = "default"
+        }
+    }
+
+    const updatedCategories = categories.filter(categories => categories.id !== categoryId);
+    localStorage.setItem("Tasks", JSON.stringify(tasks));
+    localStorage.setItem("Categories", JSON.stringify(updatedCategories));
+    listCategories();
+    listTask();
 
 }
 
@@ -232,7 +245,7 @@ function addDetailedTask(taskName) {
 
 }
 
-function deleteTask(taskId){
+function deleteTask(taskId) {
     const tasks = JSON.parse(localStorage.getItem("Tasks") || "[]");
 
     const updatedTasks = tasks.filter(task => task.id !== taskId);
@@ -264,7 +277,7 @@ function listTask() {
             const deleteButton = document.createElement("button");
             deleteButton.textContent = "Delete";
 
-             deleteButton.addEventListener('click', () => {
+            deleteButton.addEventListener('click', () => {
                 deleteTask(tasks[i].id);
             });
 
