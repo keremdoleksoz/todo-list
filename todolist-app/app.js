@@ -68,7 +68,7 @@ function editCategory(categoryId, newCategoryName) {
 }
 
 function deleteCategory(categoryId) {
-    const categories = JSON.parse(localStorage.getItem(("Categories") || "[]"));
+    const categories = JSON.parse(localStorage.getItem("Categories") || "[]");
     const tasks = JSON.parse(localStorage.getItem("Tasks") || "[]");
 
     for (let i = 0; i < tasks.length; i++) {
@@ -98,44 +98,49 @@ function listCategories() {
             const span = document.createElement(`span`);
             span.textContent = categories[i].name
 
-            const editButton = document.createElement(`button`);
-            editButton.textContent = `Edit`;
+            li.appendChild(span);
 
-            const deleteButton = document.createElement(`button`);
-            deleteButton.textContent = `Delete`;
 
-            editButton.addEventListener("click", () => {
-                const input = document.createElement("input")
-                input.type = "text";
-                input.value = categories[i].name;
+            if (categories[i].id !== "default") {
+                const editButton = document.createElement(`button`);
+                editButton.textContent = `Edit`;
 
-                li.replaceChild(input, span);
 
-                input.focus();
-                input.select();
+                const deleteButton = document.createElement(`button`);
+                deleteButton.textContent = `Delete`;
 
-                input.addEventListener("keydown", (event) => {
-                    if (event.key === "Enter") {
-                        editCategory(categories[i].id, input.value);
-                    }
+                editButton.addEventListener("click", () => {
+                    const input = document.createElement("input")
+                    input.type = "text";
+                    input.value = categories[i].name;
 
-                    if (event.key === "Escape") {
-                        listCategories();
-                    };
+                    li.replaceChild(input, span);
+
+                    input.focus();
+                    input.select();
+
+                    input.addEventListener("keydown", (event) => {
+                        if (event.key === "Enter") {
+                            editCategory(categories[i].id, input.value);
+                        }
+
+                        if (event.key === "Escape") {
+                            listCategories();
+                        };
+
+                    });
 
                 });
 
-            });
-
-            deleteButton.addEventListener('click', () => {
-                deleteCategory(categories[i].id);
-            });
+                deleteButton.addEventListener('click', () => {
+                    deleteCategory(categories[i].id);
+                });
 
 
-            li.appendChild(span);
-            li.appendChild(editButton);
-            li.appendChild(deleteButton);
 
+                li.appendChild(editButton);
+                li.appendChild(deleteButton);
+            }
             categoryList.appendChild(li)
         }
     }
