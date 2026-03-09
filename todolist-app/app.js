@@ -44,7 +44,7 @@ function addCategory(categoryName) {
         name: value
     };
 
-    categories.push(newCategory);
+    categories.unshift(newCategory);
     localStorage.setItem(`Categories`, JSON.stringify(categories));
     listCategories();
 
@@ -221,7 +221,7 @@ function addQuickTask() {
         completed: false,
     }
 
-    tasks.push(newTask);
+    tasks.unshift(newTask);
     localStorage.setItem("Tasks", JSON.stringify(tasks));
     listTask();
 
@@ -252,7 +252,7 @@ function addDetailedTask(taskName) {
         completed: false,
     }
 
-    tasks.push(newTask);
+    tasks.unshift(newTask);
     localStorage.setItem("Tasks", JSON.stringify(tasks));
     listTask();
 
