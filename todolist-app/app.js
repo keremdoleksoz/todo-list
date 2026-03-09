@@ -255,6 +255,24 @@ function deleteTask(taskId) {
 
 }
 
+function editTask(taskId, newTaskName){
+    const value = newTaskName.trim();
+    if(value == "") return;
+
+    const tasks = JSON.parse(localStorage.getItem("Tasks") || "[]");
+
+    for(let i = 0; i<tasks.length; i++){
+        if(tasks[i].id === taskId){
+            tasks[i].name = value;
+            break;
+        }
+    }
+
+    localStorage.setItem("Tasks", JSON.stringify(tasks));
+    listTask();
+}
+
+
 function listTask() {
     const tasks = JSON.parse(localStorage.getItem("Tasks") || "[]");
     const taskList = document.getElementById("taskList");
@@ -280,6 +298,13 @@ function listTask() {
             deleteButton.addEventListener('click', () => {
                 deleteTask(tasks[i].id);
             });
+
+                editButton.addEventListener("click", () => {
+                    const newName = prompt("Add new category name", tasks[i].name);
+                    if (newName != null) {
+                        editTask(tasks[i].id, newName);
+                    }
+                })
 
             li.appendChild(checkbox);
             li.appendChild(span);
