@@ -16,7 +16,7 @@
         </section>
 
         <dialog id="categoryDialog">
-            <form id="categoryDialog">
+            <form id="categoryForm">
                 <h3>Add Category</h3>
 
                 <label for="dialogCategoryName">Category Name</label>
@@ -39,17 +39,35 @@
         </section>
 
         <dialog id="taskDialog">
-            <form id="taskDialog">
+            <form id="taskForm">
                 <h3>Add detailed task</h3>
 
                 <label for="dialogTaskName">Task Name</label>
                 <input id="dialogTaskName" name="dialogTaskName" type="text" required>
 
                 <label for="startDate">Start date:</label>
-                <input type="date", id="startDate", name="startDate">
+                <input type="date" id="startDate"  name="startDate" required>
 
                 <label for="endDate">Deadline date:</label>
-                <input type="date", id="endDate", name="endDate">
+                <input type="date" id="endDate" name="endDate" required>
+
+                <label for="categoryOptions">Category: </label>
+                <select name="categoryOptions" id="categoryOptions">
+                    <option value="default">Default</option>
+                </select>
+
+                <label for="priorityOptions">Priority: </label>
+                <select name="priorityOptions" id="priorityOptions">
+                    <option value="unassigned">UNASSIGNED</option>
+                    <option value="low">LOW</option>
+                    <option value="medium">MEDIUM</option>
+                    <option value="high">HIGH</option>
+                </select>
+
+                <div class="actions">
+                    <button type="button" id="cancelTaskDialog">Cancel</button>
+                    <button type="submit" id="submitTaskDialog">Submit</button>
+                </div>
             </form>
         </dialog>
     </main>

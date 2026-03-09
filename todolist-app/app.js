@@ -129,52 +129,117 @@ function defaultCategory() {
 
 // ****************************************** TASKS ******************************************
 
-function taskOperations(){
+function taskOperations() {
     listTask();
     const addQuickTaskButton = document.getElementById("addQuickTask");
+    const dialog = document.getElementById("taskDialog");
+    const addDetailedTaskButton = document.getElementById("addDetailedTask");
+    const submitTaskButton = document.getElementById("submitTaskDialog");
+    const cancelTaskButton = document.getElementById("cancelTaskDialog");
+    const dialogTaskName = document.getElementById("dialogTaskName");
 
     addQuickTaskButton.addEventListener("click", (event) => {
         event.preventDefault();
         addQuickTask();
     })
+
+    addDetailedTaskButton.addEventListener("click", () => {
+        const categories = JSON.parse(localStorage.getItem("Categories") || "[]");
+        const categoryOptions = document.getElementById("categoryOptions");
+
+        categoryOptions.innerHTML = "";
+
+        for (let i = 0; i < categories.length; i++) {
+            const option = document.createElement("option");
+            option.value = categories[i].id;
+            option.textContent = categories[i].name;
+            categoryOptions.appendChild(option);
+        }
+        dialog.showModal();
+    });
+
+    submitTaskButton.addEventListener("click", (event) => {
+        event.preventDefault();
+        addDetailedTask(dialogTaskName.value);
+        dialogTaskName.value = "";
+        dialog.close();
+    })
+
+
+    cancelTaskButton.addEventListener("click", () => {
+        dialogTaskName.value = "";
+        dialog.close();
+    })
+
+
 }
 
 function addQuickTask() {
     const taskInput = document.getElementById("taskInput");
 
-        const value = taskInput.value.trim();
-        if(value == "") return;
+    const value = taskInput.value.trim();
+    if (value == "") return;
 
-        const tasks = JSON.parse(localStorage.getItem("Tasks") || "[]");
+    const tasks = JSON.parse(localStorage.getItem("Tasks") || "[]");
 
-        const newTask = {
-            id: crypto.randomUUID(),
-            name: value,
-            category: "default",
-            startDate: null,
-            endDate: null,
-            createdAt: new Date().toISOString(),
-            priority: null,
-            completed: false,
-        }
+    const newTask = {
+        id: crypto.randomUUID(),
+        name: value,
+        category: "default",
+        startDate: null,
+        endDate: null,
+        createdAt: new Date().toISOString(),
+        priority: null,
+        completed: false,
+    }
 
-        tasks.push(newTask);
-        localStorage.setItem("Tasks", JSON.stringify(tasks));
-        listTask();
+    tasks.push(newTask);
+    localStorage.setItem("Tasks", JSON.stringify(tasks));
+    listTask();
 
-        taskInput.value = "";
-    
+    taskInput.value = "";
+
 }
 
+function addDetailedTask(taskName) {
 
-function listTask(){
+    const startDate = document.getElementById("startDate").value
+    const endDate = document.getElementById("endDate").value
+    const priority = document.getElementById("priorityOptions").value
+    const category = document.getElementById("categoryOptions").value
+
+    console.log("category", category)
+
+
+    const tasks = JSON.parse(localStorage.getItem("Tasks") || "[]");
+
+    const newTask = {
+        id: crypto.randomUUID(),
+        name: taskName,
+        category: category,
+        startDate: startDate,
+        endDate: endDate,
+        createdAt: new Date().toISOString(),
+        priority: priority,
+        completed: false,
+    }
+
+    tasks.push(newTask);
+    localStorage.setItem("Tasks", JSON.stringify(tasks));
+    listTask();
+
+    document.getElementById("taskForm").reset();
+
+}
+
+function listTask() {
     const tasks = JSON.parse(localStorage.getItem("Tasks") || "[]");
     const taskList = document.getElementById("taskList");
 
     taskList.innerHTML = "";
 
-    if(tasks.length > 0){
-        for(let i=0; i<tasks.length; i++){
+    if (tasks.length > 0) {
+        for (let i = 0; i < tasks.length; i++) {
             const li = document.createElement("li");
 
             const checkbox = document.createElement("input");
@@ -195,7 +260,7 @@ function listTask(){
             li.appendChild(deleteButton);
 
             taskList.appendChild(li);
-           
+
         }
     }
 }
