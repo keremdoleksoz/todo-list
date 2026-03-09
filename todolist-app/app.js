@@ -2,6 +2,7 @@ document.addEventListener(`DOMContentLoaded`, () => {
     defaultCategory();
     categoryOperations();
     taskOperations();
+    sorting();
 })
 
 
@@ -381,4 +382,32 @@ function listTask() {
 
         }
     }
+}
+
+function sorting() {
+    const sortingOptions = document.getElementById("sortingOptions");
+
+    sortingOptions.addEventListener("change", () => {
+        switch (sortingOptions.value) {
+            case "newest":
+                console.log(`newest`)
+                break;
+
+            case "oldest":
+                console.log(`oldest`)
+                break;
+
+            case "byPriority":
+                console.log(`byPriority`)
+                break;
+
+            case "byCategory":
+                console.log(`byCategory`)
+                break;
+
+            case "byCompletion":
+                console.log(`byCompletion`)
+                break;
+        }
+    })
 }
