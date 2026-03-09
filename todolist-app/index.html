@@ -28,6 +28,30 @@
                 </div>
             </form>
         </dialog>
+
+
+        <section>
+            <h3>Tasks</h3>
+            <ul id="taskList"></ul>
+            <label for="taskInput">Enter a task</label>
+            <input type="text" id="taskInput" class="task" placeholder="...">
+            <button id="addQuickTask">+ Add Task</button> <button id="addDetailedTask">+ Add Detailed Task</button>
+        </section>
+
+        <dialog id="taskDialog">
+            <form id="taskDialog">
+                <h3>Add detailed task</h3>
+
+                <label for="dialogTaskName">Task Name</label>
+                <input id="dialogTaskName" name="dialogTaskName" type="text" required>
+
+                <label for="startDate">Start date:</label>
+                <input type="date", id="startDate", name="startDate">
+
+                <label for="endDate">Deadline date:</label>
+                <input type="date", id="endDate", name="endDate">
+            </form>
+        </dialog>
     </main>
 
     <script src="app.js"></script>
