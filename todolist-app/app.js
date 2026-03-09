@@ -66,7 +66,7 @@ function editCategory(categoryId, newCategoryName) {
     listCategories();
 }
 
-function deleteCategory(categoryId) { // UNFINISHED
+function deleteCategory(categoryId) {
     const categories = JSON.parse(localStorage.getItem(("Categories") || "[]"));
     const tasks = JSON.parse(localStorage.getItem("Tasks") || "[]");
 
@@ -103,11 +103,26 @@ function listCategories() {
             const deleteButton = document.createElement(`button`);
             deleteButton.textContent = `Delete`;
 
-            editButton.addEventListener(`click`, () => {
-                const newName = prompt("Add new category name", categories[i].name);
-                if (newName != null) {
-                    editCategory(categories[i].id, newName);
-                }
+            editButton.addEventListener("click", () => {
+                const input = document.createElement("input")
+                input.type = "text";
+                input.value = categories[i].name;
+
+                li.replaceChild(input, span);
+
+                input.focus();
+                input.select();
+
+                input.addEventListener("keydown", (event) => {
+                    if (event.key === "Enter") {
+                        editCategory(categories[i].id, input.value);
+                    }
+
+                    if (event.key === "Escape") {
+                        listCategories();
+                    };
+
+                });
 
             });
 
