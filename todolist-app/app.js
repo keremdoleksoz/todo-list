@@ -70,8 +70,8 @@ function deleteCategory(categoryId) { // UNFINISHED
     const categories = JSON.parse(localStorage.getItem(("Categories") || "[]"));
     const tasks = JSON.parse(localStorage.getItem("Tasks") || "[]");
 
-    for(let i=0; i<tasks.length; i++){
-        if(tasks[i].category == categoryId){
+    for (let i = 0; i < tasks.length; i++) {
+        if (tasks[i].category == categoryId) {
             tasks[i].category = "default"
         }
     }
@@ -255,14 +255,14 @@ function deleteTask(taskId) {
 
 }
 
-function editTask(taskId, newTaskName){
+function editTask(taskId, newTaskName) {
     const value = newTaskName.trim();
-    if(value == "") return;
+    if (value == "") return;
 
     const tasks = JSON.parse(localStorage.getItem("Tasks") || "[]");
 
-    for(let i = 0; i<tasks.length; i++){
-        if(tasks[i].id === taskId){
+    for (let i = 0; i < tasks.length; i++) {
+        if (tasks[i].id === taskId) {
             tasks[i].name = value;
             break;
         }
@@ -285,6 +285,7 @@ function listTask() {
 
             const checkbox = document.createElement("input");
             checkbox.type = "checkbox";
+            checkbox.checked = tasks[i].completed || false;
 
             const span = document.createElement("span");
             span.textContent = tasks[i].name;
@@ -299,12 +300,62 @@ function listTask() {
                 deleteTask(tasks[i].id);
             });
 
-                editButton.addEventListener("click", () => {
-                    const newName = prompt("Add new category name", tasks[i].name);
-                    if (newName != null) {
-                        editTask(tasks[i].id, newName);
+            editButton.addEventListener("click", () => {
+                const input = document.createElement("input")
+                input.type = "text";
+                input.value = tasks[i].name;
+
+                li.replaceChild(input, span);
+
+                input.focus();
+                input.select();
+
+                input.addEventListener("keydown", (event) => {
+                    if (event.key === "Enter") {
+                        editTask(tasks[i].id, input.value);
+                    }
+
+                    if (event.key === "Escape") {
+                        listTask();
+                    };
+
+                });
+
+            });
+
+            span.addEventListener("dblclick", () => {
+                const input = document.createElement("input")
+                input.type = "text";
+                input.value = tasks[i].name;
+
+                li.replaceChild(input, span);
+
+                input.focus();
+                input.select();
+
+                input.addEventListener("keydown", (event) => {
+                    if (event.key === "Enter") {
+                        editTask(tasks[i].id, input.value);
+                    }
+
+                    if (event.key === "Escape") {
+                        listTask();
                     }
                 })
+            });
+
+            checkbox.addEventListener("change", (event) => {
+                if (event.target.checked) {
+                    tasks[i].completed = true;
+                }
+
+                else {
+                    tasks[i].completed = false;
+                }
+
+                localStorage.setItem("Tasks", JSON.stringify(tasks));
+
+            });
 
             li.appendChild(checkbox);
             li.appendChild(span);
