@@ -3,6 +3,7 @@ document.addEventListener(`DOMContentLoaded`, () => {
     categoryOperations();
     taskOperations();
     sorting();
+    taskTimeControl();
 })
 
 
@@ -311,6 +312,16 @@ function listTask(tasksParam = null) {
             const span = document.createElement("span");
             span.textContent = tasks[i].name;
 
+            const status = taskTimeControl(tasks[i]);
+            console.log(status);
+
+            if(status == "expired"){
+                li.classList.add("expired-task");
+            }
+            else if(status == "approaching"){
+                li.classList.add("approaching-task");
+            }
+
             const editButton = document.createElement("button");
             editButton.textContent = "Edit";
 
@@ -452,4 +463,24 @@ function sorting() {
         localStorage.setItem("Tasks", JSON.stringify(tasks));
         listTask(tasks);
     })
+}
+
+function taskTimeControl() {
+    const tasks = JSON.parse(localStorage.getItem("Tasks") || "[]");
+    const now = Date.now();
+    const oneDayLater = now + 24 * 60 * 60 * 1000;
+
+
+    for (let i = 0; i < tasks.length; i++) {
+        const endDate = new Date(tasks[i].endDate).getTime();
+        if (endDate < now) {
+            return "expired";
+        }
+
+        if (endDate >= now && oneDayLater <= endDate) {
+            return "approaching";
+        }
+    }
+
+    return "normal";
 }
