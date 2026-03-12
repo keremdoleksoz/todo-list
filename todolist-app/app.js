@@ -5,6 +5,7 @@ document.addEventListener(`DOMContentLoaded`, () => {
     sorting();
     taskTimeControl();
     search();
+
 })
 
 
@@ -99,9 +100,13 @@ function listCategories() {
 
             const span = document.createElement(`span`);
             span.textContent = categories[i].name
+            span.classList.add("clickable-category");
 
             li.appendChild(span);
 
+            span.addEventListener("click", () => {
+                filterTasksByCategory(categories[i].id);
+            })
 
             if (categories[i].id !== "default") {
                 const editButton = document.createElement(`button`);
@@ -146,6 +151,23 @@ function listCategories() {
             categoryList.appendChild(li)
         }
     }
+
+    const allLi = document.createElement("li");
+    const allSpan = document.createElement("span");
+    allSpan.textContent = "All tasks";
+    allLi.appendChild(allSpan);
+
+    allLi.addEventListener("click", () => {
+        listTask();
+    });
+
+    categoryList.appendChild(allLi);
+}
+
+function filterTasksByCategory(categoryId) {
+    const tasks = JSON.parse(localStorage.getItem("Tasks"), "[]");
+    const filteredTasks = tasks.filter(task => task.category === categoryId);
+    listTask(filteredTasks);
 }
 
 function defaultCategory() {
@@ -156,7 +178,7 @@ function defaultCategory() {
     if (!hasDefault) {
         categories.unshift({
             id: `default`,
-            name: `Default`
+            name: `Quick`
         });
 
         localStorage.setItem(`Categories`, JSON.stringify(categories));
@@ -456,7 +478,7 @@ function sorting() {
     })
 }
 
-function taskTimeControl() {
+function taskTimeControl(task) {
     const tasks = JSON.parse(localStorage.getItem("Tasks") || "[]");
     const now = Date.now();
     const oneDayLater = now + 24 * 60 * 60 * 1000;
@@ -476,15 +498,14 @@ function taskTimeControl() {
     return "normal";
 }
 
-function search(){
+function search() {
     const searchBoxInput = document.getElementById("searchBox")
-   
-    const tasks = JSON.parse(localStorage.getItem("Tasks") || "[]");
 
     searchBoxInput.addEventListener("input", () => {
+        const tasks = JSON.parse(localStorage.getItem("Tasks") || "[]");
         const value = searchBoxInput.value.toLowerCase().trim();
 
-        if(value === ""){
+        if (value === "") {
             listTask();
             return;
         }
