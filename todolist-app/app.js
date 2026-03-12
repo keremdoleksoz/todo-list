@@ -294,8 +294,8 @@ function editTask(taskId, newTaskName) {
 }
 
 
-function listTask() {
-    const tasks = JSON.parse(localStorage.getItem("Tasks") || "[]");
+function listTask(tasksParam = null) {
+    const tasks = tasksParam || JSON.parse(localStorage.getItem("Tasks") || "[]");
     const taskList = document.getElementById("taskList");
 
     taskList.innerHTML = "";
@@ -393,26 +393,63 @@ function sorting() {
     const sortingOptions = document.getElementById("sortingOptions");
 
     sortingOptions.addEventListener("change", () => {
+
+        const tasks = JSON.parse(localStorage.getItem("Tasks") || "[]");
+        const categories = JSON.parse(localStorage.getItem("Categories") || "[]");
+
         switch (sortingOptions.value) {
             case "newest":
-                console.log(`newest`)
+                tasks.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                console.log(tasks);
                 break;
 
             case "oldest":
-                console.log(`oldest`)
+                tasks.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+                console.log(tasks);
                 break;
 
             case "byPriority":
-                console.log(`byPriority`)
+
+                for (let i = 0; i < tasks.length; i++) {
+                    if (tasks[i].priority === null) {
+                        tasks[i].priority = "unassigned"
+                    }
+                }
+
+                const priorityOrder = {
+                    high: 1,
+                    medium: 2,
+                    low: 3,
+                    unassigned: 4
+                };
+
+                tasks.sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]);
                 break;
 
             case "byCategory":
-                console.log(`byCategory`)
+
+                tasks.sort((a, b) => {
+                    const categoryId1 = a.category;
+                    const foundCategory1 = categories.find(cat => cat.id === categoryId1);
+                    const categoryName1 = foundCategory1.name;
+
+                    const categoryId2 = b.category;
+                    const foundCategory2 = categories.find(cat => cat.id === categoryId2);
+                    const categoryName2 = foundCategory2.name;
+
+                    if (categoryName1 === "Default" && categoryName2 !== "Default") return 1;
+                    if (categoryName1 !== "Default" && categoryName2 === "Default") return -1;
+
+                    return categoryName1.localeCompare(categoryName2);
+                });
                 break;
 
             case "byCompletion":
-                console.log(`byCompletion`)
+                tasks.sort((a, b) => a.completed - b.completed)
                 break;
         }
+
+        localStorage.setItem("Tasks", JSON.stringify(tasks));
+        listTask(tasks);
     })
 }
