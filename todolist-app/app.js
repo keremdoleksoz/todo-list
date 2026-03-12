@@ -4,6 +4,7 @@ document.addEventListener(`DOMContentLoaded`, () => {
     taskOperations();
     sorting();
     taskTimeControl();
+    search();
 })
 
 
@@ -315,10 +316,10 @@ function listTask(tasksParam = null) {
             const status = taskTimeControl(tasks[i]);
             console.log(status);
 
-            if(status == "expired"){
+            if (status == "expired") {
                 li.classList.add("expired-task");
             }
-            else if(status == "approaching"){
+            else if (status == "approaching") {
                 li.classList.add("approaching-task");
             }
 
@@ -419,6 +420,14 @@ function sorting() {
                 console.log(tasks);
                 break;
 
+            case "nameAsc":
+                tasks.sort((a, b) => a.name.localeCompare(b.name));
+                break;
+
+            case "nameDsc":
+                tasks.sort((a, b) => b.name.localeCompare(a.name));
+                break;
+
             case "byPriority":
 
                 for (let i = 0; i < tasks.length; i++) {
@@ -435,24 +444,6 @@ function sorting() {
                 };
 
                 tasks.sort((a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]);
-                break;
-
-            case "byCategory":
-
-                tasks.sort((a, b) => {
-                    const categoryId1 = a.category;
-                    const foundCategory1 = categories.find(cat => cat.id === categoryId1);
-                    const categoryName1 = foundCategory1.name;
-
-                    const categoryId2 = b.category;
-                    const foundCategory2 = categories.find(cat => cat.id === categoryId2);
-                    const categoryName2 = foundCategory2.name;
-
-                    if (categoryName1 === "Default" && categoryName2 !== "Default") return 1;
-                    if (categoryName1 !== "Default" && categoryName2 === "Default") return -1;
-
-                    return categoryName1.localeCompare(categoryName2);
-                });
                 break;
 
             case "byCompletion":
@@ -483,4 +474,26 @@ function taskTimeControl() {
     }
 
     return "normal";
+}
+
+function search(){
+    const searchBoxInput = document.getElementById("searchBox")
+   
+    const tasks = JSON.parse(localStorage.getItem("Tasks") || "[]");
+
+    searchBoxInput.addEventListener("input", () => {
+        const value = searchBoxInput.value.toLowerCase().trim();
+
+        if(value === ""){
+            listTask();
+            return;
+        }
+
+        const searchedTask = tasks.filter(item => item.name.toLowerCase().includes(value));
+
+        console.log(search);
+
+        listTask(searchedTask);
+
+    })
 }
