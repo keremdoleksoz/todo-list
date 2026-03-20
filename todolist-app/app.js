@@ -58,7 +58,7 @@ function editCategory(categoryId, newCategoryName) {
     const value = newCategoryName.trim();
     if (value === "") return;
 
-    const categories = JSON.parse(localStorage.getItem(("Categories") || "[]"));
+    const categories = JSON.parse(localStorage.getItem("Categories") || "[]");
 
     for (let i = 0; i < categories.length; i++) {
         if (categories[i].id == categoryId) {
@@ -165,7 +165,7 @@ function listCategories() {
 }
 
 function filterTasksByCategory(categoryId) {
-    const tasks = JSON.parse(localStorage.getItem("Tasks"), "[]");
+    const tasks = JSON.parse(localStorage.getItem("Tasks") || "[]");
     const filteredTasks = tasks.filter(task => task.category === categoryId);
     listTask(filteredTasks);
 }
