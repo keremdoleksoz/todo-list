@@ -5,15 +5,72 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ToDo List</title>
+    <link rel="stylesheet" href="components/styles.css">
 </head>
 
 <body>
-    <main>
-        <section>
-            <h3>Categories</h3>
-            <ul id="categoryList"></ul>
-            <button id="addCategoryButton">+ Add Category</button>
+    <main class="layout">
+        <aside class="sidebar-left">
+            <section>
+                <h3>Categories</h3>
+                <ul id="categoryList"></ul>
+                <button id="addCategoryButton">+ Add Category</button>
+            </section>
+        </aside>
+
+        <section class="content-center">
+            <section>
+                <h3>Tasks</h3>
+                <ul id="taskList"></ul>
+
+                <label for="taskInput">Enter a task</label>
+                <input type="text" id="taskInput" class="task" placeholder="...">
+
+                <button id="addQuickTask">+ Add Task</button>
+                <button id="addDetailedTask">+ Add Detailed Task</button>
+            </section>
         </section>
+
+        <aside class="sidebar-right">
+            <section>
+                <h3>Filters & Sorting</h3>
+
+                <div>
+                    <label for="sortingOptions">Sort by</label>
+                    <select name="sortingOptions" id="sortingOptions">
+                        <option value="newest">Newest First</option>
+                        <option value="oldest">Oldest First</option>
+                        <option value="nameAsc">Name A-Z</option>
+                        <option value="nameDsc">Name Z-A</option>
+                        <option value="byPriority">By priority</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="searchBox">Search</label>
+                    <input id="searchBox" name="searchBox" type="text">
+                </div>
+
+                <div>
+                    <label for="statusFilter">Status</label>
+                    <select id="statusFilter" name="statusFilter">
+                        <option value="all">All</option>
+                        <option value="active">Active</option>
+                        <option value="completed">Completed</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="filterStartDate">Deadline from</label>
+                    <input type="date" id="filterStartDate" name="filterStartDate">
+                </div>
+
+                <div>
+                    <label for="filterEndDate">Deadline to</label>
+                    <input type="date" id="filterEndDate" name="filterEndDate">
+                </div>
+            </section>
+        </aside>
 
         <dialog id="categoryDialog">
             <form id="categoryForm">
@@ -29,31 +86,6 @@
             </form>
         </dialog>
 
-        <div>
-            <label for="sortingOptions">Sort by</label>
-            <select name="sortingOptions" id="sortingOptions">
-                <option value="newest">Newest First</option>
-                <option value="oldest">Oldest First</option>
-                <option value="nameAsc">Name A-Z</option>
-                <option value="nameDsc">Name Z-A</option>
-                <option value="byPriority">By priority</option>
-                <option value="byCompletion">By completion</option>
-            </select>
-        </div>
-
-        <div>
-            <label for="searchBox">Search</label>
-            <input id="searchBox" name="searchBox" type="text">
-        </div>
-
-        <section>
-            <h3>Tasks</h3>
-            <ul id="taskList"></ul>
-            <label for="taskInput">Enter a task</label>
-            <input type="text" id="taskInput" class="task" placeholder="...">
-            <button id="addQuickTask">+ Add Task</button> <button id="addDetailedTask">+ Add Detailed Task</button>
-        </section>
-
         <dialog id="taskDialog">
             <form id="taskForm">
                 <h3>Add detailed task</h3>
@@ -67,12 +99,12 @@
                 <label for="endDate">Deadline date:</label>
                 <input type="date" id="endDate" name="endDate">
 
-                <label for="categoryOptions">Category: </label>
+                <label for="categoryOptions">Category:</label>
                 <select name="categoryOptions" id="categoryOptions">
-                    <option value="default">Default</option>
+                    <option value="default">General</option>
                 </select>
 
-                <label for="priorityOptions">Priority: </label>
+                <label for="priorityOptions">Priority:</label>
                 <select name="priorityOptions" id="priorityOptions">
                     <option value="unassigned">Unassigned</option>
                     <option value="low">Low</option>
