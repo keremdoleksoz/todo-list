@@ -260,7 +260,13 @@ function taskOperations() {
     });
 
     addDetailedTaskButton.addEventListener("click", () => {
+        const quickTaskValue = taskInput.value.trim();
         openTaskDialogForCreate();
+
+        if(quickTaskValue !== ""){
+            dialogTaskName.value = quickTaskValue;
+            taskInput.value = "";
+        }
 
     });
 
