@@ -443,11 +443,10 @@ function updateDetailedTask(taskId) {
 
     if (!foundTask) return;
 
-    foundTask.name = value;
-    foundTask.startDate = document.getElementById("startDate").value || null;
-    foundTask.endDate = document.getElementById("endDate").value || null;
-    foundTask.priority = document.getElementById("priorityOptions").value;
-    foundTask.category = document.getElementById("categoryOptions").value;
+    const startDate = document.getElementById("startDate").value || null;
+    const endDate = document.getElementById("endDate").value || null;
+    const priority = document.getElementById("priorityOptions").value;
+    const category = document.getElementById("categoryOptions").value;
 
     if (!validateTaskDates(startDate, endDate)) {
         return;
