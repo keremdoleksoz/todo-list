@@ -249,28 +249,18 @@ function taskOperations() {
     const endDateInput = document.getElementById("endDate");
 
     startDateInput.addEventListener("change", () => {
-        const today = getTodayString();
+       applyDateInputLimits();
 
-        if (startDateInput.value && startDateInput.value < today) {
-            startDateInput.value = today;
-        }
-
-        endDateInput.min = startDateInput.value || today;
-
-        if (endDateInput.value && startDateInput.value && endDateInput.value < startDateInput.value) {
-            endDateInput.value = startDateInput.value;
+        if (startDateInput.value && endDateInput.value && startDateInput.value > endDateInput.value) {
+            startDateInput.value = endDateInput.value;
         }
     });
 
     endDateInput.addEventListener("change", () => {
-        const today = getTodayString();
+        applyDateInputLimits();
 
-        if (endDateInput.value && endDateInput.value < today) {
-            endDateInput.value = today;
-        }
-
-        if (startDateInput.value && endDateInput.value < startDateInput.value) {
-            endDateInput.value = startDateInput.value;
+        if (startDateInput.value && endDateInput.value && startDateInput.value > endDateInput.value) {
+           endDateInput.value  = startDateInput.value;
         }
     });
 
@@ -340,9 +330,11 @@ function openTaskDialogForCreate() {
 
 
 function resetTaskDialog() {
+    const selectedCategory = filters.categoryId !== "all" ? filters.categoryId : "default";
+
     editingTaskId = null;
     document.getElementById("taskForm").reset();
-    populateCategoryOptions("default");
+    populateCategoryOptions(selectedCategory);
     document.querySelector("#taskDialog h3").textContent = "Add detailed task";
     document.getElementById("submitTaskDialog").textContent = "Submit";
     applyDateInputLimits();
@@ -782,26 +774,31 @@ function applyDateInputLimits() {
     const startDateInput = document.getElementById("startDate");
     const endDateInput = document.getElementById("endDate");
 
-    startDateInput.min = today;
-    endDateInput.min = today;
+    if(endDateInput.value){
+        startDateInput.max = endDateInput.value;
+    }else{
+        startDateInput.max = "";
+    }
 
-    if (startDateInput.value) {
+    if(startDateInput.value){
         endDateInput.min = startDateInput.value;
+    }else{
+        endDateInput.min = "";
     }
 }
 
 function validateTaskDates(startDate, endDate) {
     const today = getTodayString();
 
-    if (startDate && startDate < today) {
+    /*if (startDate && startDate < today) {
         alert("Start date cannot be earlier than today.");
         return false;
-    }
+    }*/
 
-    if (endDate && endDate < today) {
+    /*if (endDate && endDate < today) {
         alert("Deadline cannot be earlier than today.");
         return false;
-    }
+    }*/
 
     if (startDate && endDate && endDate < startDate) {
         alert("Deadline cannot be earlier than start date.");
