@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // Global Filters
 const filters = {
     categoryId: "all",
+    categorySearchText: "",
     searchText: "",
     status: "all",
     startDate: "",
@@ -28,6 +29,7 @@ function categoryOperations() {
     const submitButtonDialog = document.getElementById("submitDialog");
     const cancelDialogButton = document.getElementById("cancelDialog");
     const dialogCategoryName = document.getElementById("dialogCategoryName");
+    const categorySearchBox = document.getElementById("categorySearchBox");
 
     addCategoryButton.addEventListener("click", () => dialog.showModal());
 
@@ -42,6 +44,11 @@ function categoryOperations() {
         dialogCategoryName.value = "";
         dialog.close();
     });
+
+    categorySearchBox.addEventListener("input", () => {
+        filters.categorySearchText = categorySearchBox.value.toLowerCase().trim();
+        listCategories();
+    })
 }
 
 function addCategory(categoryName) {
@@ -49,6 +56,13 @@ function addCategory(categoryName) {
     if (value === "") return;
 
     const categories = JSON.parse(localStorage.getItem("Categories") || "[]");
+
+    const alreadyExist = categories.some(category => category.name.trim().toLowerCase() === value.trim().toLowerCase());
+
+    if(alreadyExist){
+        alert("This category already exist.")
+        return;
+    }
 
     const newCategory = {
         id: crypto.randomUUID(),
@@ -65,6 +79,13 @@ function editCategory(categoryId, newCategoryName) {
     if (value === "") return;
 
     const categories = JSON.parse(localStorage.getItem("Categories") || "[]");
+
+    const alreadyExist = categories.some(category => category.name.trim().toLowerCase() === value.trim().toLowerCase());
+
+    if(alreadyExist){
+        alert("This category already exist.")
+        return;
+    }
 
     for (let i = 0; i < categories.length; i++) {
         if (categories[i].id === categoryId) {
@@ -102,7 +123,13 @@ function deleteCategory(categoryId) {
 }
 
 function listCategories() {
-    const categories = JSON.parse(localStorage.getItem("Categories") || "[]");
+    const allCategories = JSON.parse(localStorage.getItem("Categories") || "[]");
+    const categories = allCategories.filter(category => {
+
+        if(filters.categorySearchText === "") return true;
+        return category.name.toLowerCase().includes(filters.categorySearchText);
+    });
+
     const categoryList = document.getElementById("categoryList");
 
     categoryList.innerHTML = "";
@@ -357,7 +384,7 @@ function addQuickTask() {
     const newTask = {
         id: crypto.randomUUID(),
         name: value,
-        category: "default",
+        category: filters.categoryId !== "all" ? filters.categoryId : "default",
         startDate: null,
         endDate: null,
         createdAt: new Date().toISOString(),
@@ -503,6 +530,7 @@ function sorting() {
 
 function clearAllFilters() {
     filters.categoryId = "all";
+    filters.categorySearchText = "";
     filters.searchText = "";
     filters.status = "all";
     filters.startDate = "";
@@ -510,6 +538,7 @@ function clearAllFilters() {
 }
 
 function syncFilterInputs() {
+    document.getElementById("categorySearchBox").value = "";    
     document.getElementById("searchBox").value = "";
     document.getElementById("statusFilter").value = "all";
     document.getElementById("filterStartDate").value = "";
